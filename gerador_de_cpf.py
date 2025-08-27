@@ -1,36 +1,19 @@
 import random
 
-# ---------- Gerando os nove primeros  ---------- 
-nove_digitos = [random.randint(0,9) for _ in range(9)]
+def calcular_digitos(digitos):
+    contador_regressivo = len(digitos) + 1
+    soma = sum(digito * (contador_regressivo - i) for i, digito in enumerate(digitos))
+    resto = (soma * 10) % 11
+    return 0 if resto > 9 else resto
 
-# ---------- Cálculo do primeiro dígito ----------
-contador_regressivo = 10
-soma_dos_nove_primeiros = 0
+def formatar_cpf(cpf): 
+    return f'CPF gerado: {cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
 
-for digito in nove_digitos:
-    soma_dos_nove_primeiros += digito * contador_regressivo
-    contador_regressivo -= 1
+def gerar_cpf():
+    nove_digitos = [random.randint(0, 9) for _ in range(9)]
+    primeiro_digito = calcular_digitos(nove_digitos)
+    segundo_digito = calcular_digitos(nove_digitos + [primeiro_digito])
+    cpf = ''.join(map(str, nove_digitos + [primeiro_digito, segundo_digito]))
+    return formatar_cpf(cpf)
 
-primeiro_digito_final_do_cpf = (soma_dos_nove_primeiros * 10) % 11
-
-if primeiro_digito_final_do_cpf > 9:
-    primeiro_digito_final_do_cpf = 0
-
-# ---------- Cálculo do segundo dígito ----------
-dez_primeiros_digitos = nove_digitos + [primeiro_digito_final_do_cpf]
-
-contador_regressivo = 11
-soma_dos_dez_primeiros = 0
-for digito in dez_primeiros_digitos:
-    soma_dos_dez_primeiros += digito * contador_regressivo
-    contador_regressivo -= 1
-
-
-segundo_digito_final_do_cpf = (soma_dos_dez_primeiros * 10) % 11
-
-if segundo_digito_final_do_cpf > 9:
-    segundo_digito_final_do_cpf = 0
-
-cpf_gerado_pelo_calculo = ''.join([str(digito) for digito in nove_digitos + [primeiro_digito_final_do_cpf] + [segundo_digito_final_do_cpf]])
-
-print(f'CPF gerado: {cpf_gerado_pelo_calculo[:3]}.{cpf_gerado_pelo_calculo[3:6]}.{cpf_gerado_pelo_calculo[6:9]}-{cpf_gerado_pelo_calculo[9:]}')
+print(gerar_cpf())
